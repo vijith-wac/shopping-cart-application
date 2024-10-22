@@ -6,7 +6,7 @@ const { addProduct, getAllProduct, getProductById, updateProductById, deleteProd
 router.post('/',upload.single('image'),addProduct)
 router.get('/', getAllProduct)
 router.get('/:id', getProductById)
-router.put('/:id', updateProductById)
+router.put('/:id',upload.single('image'), updateProductById)
 router.delete('/:id', deleteProductById)
 
 

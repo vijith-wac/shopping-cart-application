@@ -14,7 +14,18 @@ export const login = async (email, password) => {
     });
     return response.data.token; 
   } catch (error) {
-    console.error('Error during login:', error.response?.data || error.message);
     throw error.response?.data || new Error('Login failed');
   }
 };
+
+
+export const register = async(name,email,password)=>{
+  try{
+    const response = await axios.post(`${API_URL}/register`,{
+      name,email,password
+    })
+    return response.data
+  }catch(error){
+    throw error.response?.data || new Error('Login failed');
+  }
+}

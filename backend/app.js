@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const bodyParser = require('body-parser')
+const path = require('path')
 const connectDB = require('./config/db')
 const productRoutes = require('./routes/productRoutes')
 const authRoutes = require('./routes/authRoutes')
@@ -14,6 +15,9 @@ const PORT = process.env.PORT || 8000
 
 const app = express()
 app.use(cors())
+// Set the uploads folder as a static directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use(bodyParser.json())
 
 connectDB()

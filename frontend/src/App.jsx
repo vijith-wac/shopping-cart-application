@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginRegister from "./pages/LoginRegister";
 import ProductList from "./pages/ProductList";
 import ProtectedRoute from "./middleware/protectedRoute";
+import Cart from "./pages/Cart";
 
 
 
@@ -16,12 +17,10 @@ const App = () => {
             element={
                 <ProtectedRoute>
                    <ProductList />
-                </ProtectedRoute>
-               
-                    
-
+                </ProtectedRoute>  
             }
           />
+          <Route path="/cart" element={<Cart/>}/>
         </Routes>
     </Router>
   );

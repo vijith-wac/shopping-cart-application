@@ -32,9 +32,15 @@ const addProduct = async(req,res)=>{
 const getAllProduct = async(req,res)=>{
     try{
         const products = await ProductModel.find()
+        const updatedProducts = products.map(product => {
+            return {
+                ...product._doc,
+                image: `${process.env.BACKEND_URL}/uploads/${product.image}` 
+            };
+        });
         res.status(200).json({
             success:true,
-            products
+            products:updatedProducts
         })
     }catch(error){
         res.status(500).json({

@@ -1,60 +1,87 @@
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const User = require('../models/userModel');
+const jwt = require('jsonwebtoken')
 
 // Add an item to the cart or update quantity if it already exists
 const addItemToCart = async (req, res) => {
-  const { userID, productID, quantity } = req.body;
+  const { productID, quantity } = req.body;
+  if(!productID ){
+    return res.status(400).json({
+      message:'Product required'
+    })
+  }
+  const token = req.headers['authorization']?.split(' ')[1]; 
+
+  if (!token) {
+    return res.status(403).json({
+      message: 'Authentication required',
+    });
+  }
+
+  let userID;
 
   try {
-    // Find the user
-    const user = await User.findById({_id:userID});
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    // Verify the token and extract userID
+    const decoded = jwt.verify(token, 'test'); // Replace 'test' with your actual secret
+    userID = decoded.id;
+  } catch (err) {
+    return res.status(401).json({
+      message: 'Unauthorized',
+    });
+  }
 
-    // Find the product
-    const product = await Product.findById({_id:productID});
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
+  // Find the user
+  const user = await User.findById(userID); // No need for `{_id: userID}`
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
 
-    // Check if the cart exists for the user
-    let cart = await Cart.findOne({ userID });
+  // Find the product
+  const product = await Product.findById(productID); // No need for `{_id: productID}`
+  if (!product) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
 
-    if (!cart) {
-      // If no cart exists, create a new one
-      cart = new Cart({
-        userID,
-        items: [],
-        totalAmount: 0
-      });
-    }
+  // Check if the cart exists for the user
+  let cart = await Cart.findOne({ userID });
 
-    // Check if the product already exists in the cart
-    const existingItemIndex = cart.items.findIndex(item => item.productID.toString() === productID);
+  if (!cart) {
+    // If no cart exists, create a new one
+    cart = new Cart({
+      userID,
+      items: [],
+      totalAmount: 0,
+    });
+  }
 
-    if (existingItemIndex > -1) {
-      // Update quantity if the item already exists
-      cart.items[existingItemIndex].quantity += quantity;
-      cart.items[existingItemIndex].totalPrice = cart.items[existingItemIndex].quantity * product.price;
-    } else {
-      // Add the product to the cart as a new item
-      const totalPrice = product.price * quantity;
-      cart.items.push({
-        productID,
-        quantity,
-        totalPrice
-      });
-    }
+  // Check if the product already exists in the cart
+  const existingItemIndex = cart.items.findIndex(item => item.productID.toString() === productID);
 
-    // Update the total amount for the cart
-    cart.totalAmount = cart.items.reduce((acc, item) => acc + item.totalPrice, 0);
+  if (existingItemIndex > -1) {
+    // Update quantity if the item already exists
+    cart.items[existingItemIndex].quantity += quantity;
+    cart.items[existingItemIndex].totalPrice = cart.items[existingItemIndex].quantity * product.price;
+  } else {
+    // Add the product to the cart as a new item
+    const totalPrice = product.price * quantity;
+    cart.items.push({
+      productID,
+      quantity,
+      totalPrice,
+    });
+  }
 
-    // Save the cart
+  // Update the total amount for the cart
+  cart.totalAmount = cart.items.reduce((acc, item) => acc + item.totalPrice, 0);
+
+  // Save the cart
+  try {
     const updatedCart = await cart.save();
-
-    res.status(200).json(updatedCart);
+    res.status(200).json({
+      message:'Cart updated successfully',
+      updatedCart
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -62,9 +89,12 @@ const addItemToCart = async (req, res) => {
 
 // Get user's cart
 const getCartByUser = async (req, res) => {
-  const { userID } = req.params;
+  const token = req.headers['authorization']?.split(' ')[1]; 
+  let userID
 
   try {
+    const decoded = jwt.verify(token, 'test'); 
+    userID = decoded.id;
     const cart = await Cart.findOne({ userID }).populate('items.productID');
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found for this user' });
@@ -77,20 +107,30 @@ const getCartByUser = async (req, res) => {
 
 // Update quantity of an item in the cart
 const updateCartItem = async (req, res) => {
-  const { userID, productID, quantity } = req.body;
+  const { cartID, quantity } = req.body;
+  const token = req.headers['authorization']?.split(' ')[1]; 
+  if (!token) {
+    return res.status(403).json({
+      message: 'Authentication required',
+    });
+  }
+
+  let userID;
 
   try {
+    const decoded = jwt.verify(token, 'test'); 
+    userID = decoded.id;
     const cart = await Cart.findOne({ userID });
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found for this user' });
     }
 
-    const itemIndex = cart.items.findIndex(item => item.productID.toString() === productID);
+    const itemIndex = cart.items.findIndex(item => item.productID.toString() === cartID);
 
     if (itemIndex > -1) {
       // Update quantity and total price
       cart.items[itemIndex].quantity = quantity;
-      const product = await Product.findById(productID);
+      const product = await Product.findById(cartID);
       cart.items[itemIndex].totalPrice = cart.items[itemIndex].quantity * product.price;
 
       // Update total amount of the cart
@@ -109,9 +149,17 @@ const updateCartItem = async (req, res) => {
 
 // Remove an item from the cart
 const removeItemFromCart = async (req, res) => {
-  const { userID, productID } = req.body;
-
+  const { productID } = req.body;
+  const token = req.headers['authorization']?.split(' ')[1]; 
+  if (!token) {
+    return res.status(403).json({
+      message: 'Authentication required',
+    });
+  }
+  let userID;
   try {
+    const decoded = jwt.verify(token, 'test'); 
+    userID = decoded.id;
     const cart = await Cart.findOne({ userID });
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found for this user' });
@@ -133,9 +181,19 @@ const removeItemFromCart = async (req, res) => {
 
 // Clear the cart
 const clearCart = async (req, res) => {
-  const { userID } = req.params;
+  const token = req.headers['authorization']?.split(' ')[1]; 
+
+  if (!token) {
+    return res.status(403).json({
+      message: 'Authentication required',
+    });
+  }
+
+  let userID;
 
   try {
+    const decoded = jwt.verify(token, 'test'); 
+    userID = decoded.id;
     const cart = await Cart.findOne({ userID });
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found for this user' });

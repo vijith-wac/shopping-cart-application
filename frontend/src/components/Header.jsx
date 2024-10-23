@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from 'react-redux'
 
 const Header = () => {
-  const totalQuantity = useSelector((state) => state.cart.totalQuantity); // Get total quantity from Redux
+  const itemCount = useSelector(state => state.cart.itemCount);
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
@@ -34,7 +34,7 @@ const Header = () => {
               <Link className="nav-link" to="/cart">
                 <FontAwesomeIcon icon={faShoppingCart} />
 
-                <span className="badge bg-danger ms-1">{totalQuantity}</span>
+                <span className="badge bg-danger ms-1">{itemCount}</span>
               </Link>
             </li>
           </ul>

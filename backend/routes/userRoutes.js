@@ -8,8 +8,8 @@ const { adminMiddleWare, customerMiddleWare } = require('../middleware/authMiddl
 
 
 router.get('/', adminMiddleWare, getAllUsers)
-router.get('/:userID/orders', customerMiddleWare,  getOrdersByUser)
-router.get('/:userID/cart', customerMiddleWare, getCartByUser)
+router.get('/orders', customerMiddleWare,  getOrdersByUser)
+router.get('/cart', customerMiddleWare, getCartByUser)
 
 
 

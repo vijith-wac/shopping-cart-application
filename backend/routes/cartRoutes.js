@@ -6,8 +6,8 @@ const { customerMiddleWare } = require('../middleware/authMiddleware')
 
 router.post('/', customerMiddleWare, addItemToCart)
 router.post('/remove', customerMiddleWare, removeItemFromCart)
-router.put('/:id', customerMiddleWare, updateCartItem)
-router.delete('/:userID',customerMiddleWare, clearCart)
+router.put('/', customerMiddleWare, updateCartItem)
+router.delete('/',customerMiddleWare, clearCart)
 
 
 

@@ -99,7 +99,18 @@ const getCartByUser = async (req, res) => {
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found for this user' });
     }
-    res.status(200).json(cart);
+
+    const updatedCart = {
+      ...cart._doc,
+      items: cart.items.map(item => ({
+        ...item._doc,
+        productID: {
+          ...item.productID._doc,
+          image: `${process.env.BACKEND_URL}/uploads/${item.productID.image}`
+        }
+      }))
+    };
+    res.status(200).json(updatedCart);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -107,7 +118,7 @@ const getCartByUser = async (req, res) => {
 
 // Update quantity of an item in the cart
 const updateCartItem = async (req, res) => {
-  const { cartID, quantity } = req.body;
+  const { productID, quantity } = req.body;
   const token = req.headers['authorization']?.split(' ')[1]; 
   if (!token) {
     return res.status(403).json({
@@ -125,12 +136,12 @@ const updateCartItem = async (req, res) => {
       return res.status(404).json({ message: 'Cart not found for this user' });
     }
 
-    const itemIndex = cart.items.findIndex(item => item.productID.toString() === cartID);
+    const itemIndex = cart.items.findIndex(item => item.productID.toString() === productID);
 
     if (itemIndex > -1) {
       // Update quantity and total price
       cart.items[itemIndex].quantity = quantity;
-      const product = await Product.findById(cartID);
+      const product = await Product.findById(productID);
       cart.items[itemIndex].totalPrice = cart.items[itemIndex].quantity * product.price;
 
       // Update total amount of the cart

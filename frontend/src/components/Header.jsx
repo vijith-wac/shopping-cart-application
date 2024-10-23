@@ -5,7 +5,7 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from 'react-redux'
 
 const Header = () => {
-  const itemCount = useSelector(state => state.cart.itemCount);
+  const cartItemsCount = useSelector(state => state.cart.cartItemsCount);
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
@@ -34,7 +34,7 @@ const Header = () => {
               <Link className="nav-link" to="/cart">
                 <FontAwesomeIcon icon={faShoppingCart} />
 
-                <span className="badge bg-danger ms-1">{itemCount}</span>
+                <span className="badge bg-danger ms-1">{cartItemsCount}</span>
               </Link>
             </li>
           </ul>

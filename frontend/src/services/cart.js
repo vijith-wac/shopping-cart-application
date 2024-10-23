@@ -13,7 +13,7 @@ export const addItemToCart = async (token, productID, quantity) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`, // Include the Bearer token in the headers
+          Authorization: `Bearer ${token}`, 
         },
       }
     );

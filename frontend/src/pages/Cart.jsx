@@ -55,8 +55,7 @@ const Cart = () => {
             : cartItem
         )
       );
-      
-      // dispatch(setCartItemsCount(response?.data?.items?.length));
+      dispatch(setCartItemsCount(response?.data?.items?.length));
       fetchCartProducts()
     } catch (error) {
       console.error("Error updating quantity:", error);
@@ -65,8 +64,9 @@ const Cart = () => {
 
   const deleteHandler=async(productID,token)=>{
     try{
-      await removeProductFromCart(productID,token)
+     const response= await removeProductFromCart(productID,token)
       fetchCartProducts()
+      dispatch(setCartItemsCount(response?.items?.length));
     }catch(error){
       console.error(error)
     }

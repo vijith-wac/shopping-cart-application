@@ -4,6 +4,7 @@ import LoginRegister from "./pages/LoginRegister";
 import ProductList from "./pages/ProductList";
 import ProtectedRoute from "./middleware/protectedRoute";
 import Cart from "./pages/Cart";
+import CheckOut from "./pages/CheckOut";
 
 
 
@@ -21,6 +22,7 @@ const App = () => {
             }
           />
           <Route path="/cart" element={<Cart/>}/>
+          <Route path="/checkout" element={<CheckOut/>}/>
         </Routes>
     </Router>
   );

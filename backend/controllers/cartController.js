@@ -100,16 +100,23 @@ const getCartByUser = async (req, res) => {
       return res.status(404).json({ message: 'Cart not found for this user' });
     }
 
+    // Calculate total amount of all items
+    const totalAmount = cart.items.reduce((sum, item) => sum + item.totalPrice, 0);
+
     const updatedCart = {
       ...cart._doc,
       items: cart.items.map(item => ({
-        ...item._doc,
+        _id: item._id,
         productID: {
           ...item.productID._doc,
           image: `${process.env.BACKEND_URL}/uploads/${item.productID.image}`
-        }
-      }))
+        },
+        quantity: item.quantity,
+        totalPrice: item.totalPrice
+      })),
+      totalAmount 
     };
+
     res.status(200).json(updatedCart);
   } catch (error) {
     res.status(400).json({ message: error.message });

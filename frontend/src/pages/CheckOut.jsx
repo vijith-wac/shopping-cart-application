@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import { getAllCart } from "../services/cart";
+import { clearCart, getAllCart } from "../services/cart";
 import { createOrder } from "../services/order";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import Swal from 'sweetalert2'
+import { clearCartAll, setCartItemsCount } from "../redux/createSlice";
+import { useNavigate } from "react-router-dom";
 
 const CheckOut = () => {
   const [cartItems, setCartItems] = useState([]);
   const [address,setAddress] = useState()
-
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const getAllCartItems = async () => {
     try {
       const res = await getAllCart();
@@ -29,7 +34,16 @@ const CheckOut = () => {
     try{
         const res = await createOrder(payload)
         if(res){
-            toast.success('Order Successfully Placed')
+          Swal.fire({
+            title: "Order Placed!",
+            text: "Your product will be delivered to the provided address.",
+            icon: "success"
+          }).then(()=>{
+            navigate('/products')
+          })
+
+          await clearCart()
+        dispatch(clearCartAll()) 
         }
         
 

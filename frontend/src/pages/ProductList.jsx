@@ -9,6 +9,7 @@
   const ProductList = () => {
     const [productList, setProductList] = useState([]);
     const dispatch = useDispatch();
+    
     const token = localStorage.getItem("authToken");
   
     useEffect(() => {
@@ -26,21 +27,9 @@
       };
   
       fetchProducts();
-      getCartItemsCount();
     }, []);
   
-    const getCartItemsCount = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/api/user/cart", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        dispatch(setCartItemsCount(response?.data?.items?.length));
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-      }
-    };
+   
   
     const addToCart = async (id) => {
       let quantity = 1;
@@ -54,14 +43,12 @@
             Authorization: `Bearer ${token}`,
           },
         });
-  
-        // Update cart items count in Redux
-        dispatch(setCartItemsCount(response?.data?.items?.length));
+        dispatch(setCartItemsCount(response?.data?.items?.length))
       } catch (error) {
         console.log(error);
       }
     };
-  
+    
     return (
       <div className="container">
         <Header />

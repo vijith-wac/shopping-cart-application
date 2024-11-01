@@ -11,7 +11,7 @@ export const login = async (email, password) => {
         'Content-Type': 'application/json',
       },
     });
-    return response.data.token; 
+    return response.data; 
   } catch (error) {
     throw error.response?.data || new Error('Login failed');
   }

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../constant/api";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const token = localStorage.getItem('authToken');
 
@@ -14,7 +15,13 @@ export const createOrder = async (payload) => {
     });
     return response;
   } catch (error) {
-    console.log(error?.response?.data?.message,'er')
-    toast.error(error?.response?.data?.message)
+    Swal.fire({
+      title:'Error',
+      text: error?.response?.data?.message,
+      icon:'warning'
+
+    }).then(()=>{
+       window.location.href = '/cart'
+    })
   }
 };

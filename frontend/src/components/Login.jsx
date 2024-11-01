@@ -15,9 +15,9 @@ const Login = () => {
         e.preventDefault();
     
         try {
-          const token = await login(userData.email, userData.password); 
-          localStorage.setItem('authToken', token);
-          navigate('/products')
+          const res = await login(userData.email, userData.password); 
+          localStorage.setItem('authToken', res.token);
+          navigate(res.redirect)
         } catch (error) {
           console.error('Error during login:', error);
         }

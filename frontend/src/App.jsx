@@ -5,6 +5,7 @@ import ProductList from "./pages/ProductList";
 import ProtectedRoute from "./middleware/protectedRoute";
 import Cart from "./pages/Cart";
 import CheckOut from "./pages/CheckOut";
+import Dashboard from "./pages/admin/Dashboard";
 
 
 
@@ -23,6 +24,7 @@ const App = () => {
           />
           <Route path="/cart" element={<Cart/>}/>
           <Route path="/checkout" element={<CheckOut/>}/>
+          <Route path="/admin/dashboard" element={<Dashboard/>}/>
         </Routes>
     </Router>
   );

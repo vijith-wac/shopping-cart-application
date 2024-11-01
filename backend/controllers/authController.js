@@ -67,7 +67,8 @@ const login = async(req,res)=>{
     res.status(201).json({
         success : true,
         message : "Authentication Success",
-        token
+        token,
+        redirect : user.role ==='admin'?'/admin/dashboard':'/products'
     })
 
    }catch(error){

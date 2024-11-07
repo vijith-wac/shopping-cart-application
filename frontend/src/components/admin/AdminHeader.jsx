@@ -1,4 +1,11 @@
+import { Link} from "react-router-dom";
+
 const AdminHeader = () => {
+
+  const logoutHandler=()=>{
+    localStorage.removeItem('authToken')
+    window.location.href = '/'
+  }
   return (
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
@@ -19,19 +26,24 @@ const AdminHeader = () => {
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">
+              <Link class="nav-link" aria-current="page" to='/admin/dashboard'>
                 Users 
-              </a>
+              </Link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+            <Link class="nav-link" to="/admin/product">
                 Products
-              </a>
+              </Link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <Link class="nav-link" to="/admin/order">
                 Orders
-              </a>
+              </Link>
+            </li>
+            <li>
+            <Link className="nav-link" onClick={logoutHandler}>
+              Logout
+              </Link>
             </li>
           </ul>
         </div>

@@ -11,6 +11,10 @@ const ModalReact = ({ onHide, user, ...props }) => {
       setEmail(user.email);
     }
   }, [user]);
+
+  const updateHandler=()=>{
+    
+  }
   return (
     <Modal
       {...props}
@@ -44,7 +48,7 @@ const ModalReact = ({ onHide, user, ...props }) => {
       </Modal.Body>
       <Modal.Footer>
       <div className="mb-m">
-          <button className="btn btn-primary">Update</button>
+          <button className="btn btn-primary" onClick={updateHandler}>Update</button>
         </div>
         <button className="btn btn-secondary" onClick={onHide}>Close</button>
       </Modal.Footer>

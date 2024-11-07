@@ -1,8 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../constant/api";
 
-const token = localStorage.getItem('authToken')
-export const  allUser = async()=>{
+export const  allUser = async(token)=>{
     try{
         const response = await axios.get(`${API_URL}/user`,{
             headers: {

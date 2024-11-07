@@ -7,10 +7,11 @@ const UsersList = () => {
   const [usersList, setUsersList] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [selectedUser, setSelectedUser] = useState({ name: '', email: '' });
+  const token = localStorage.getItem('authToken')
 
   const getAllUsers = async () => {
     try {
-      const res = await allUser();
+      const res = await allUser(token);
       setUsersList(res.users);
     } catch (error) {
       console.log(error);
@@ -18,7 +19,6 @@ const UsersList = () => {
   };
 
   const editHandler = (user) => {
-
     setSelectedUser(user);
     setModalShow(true);
   };

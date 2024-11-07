@@ -1,5 +1,5 @@
 import UsersList from "../../components/admin/UsersList"
-import AdminHeader from "./AdminHeader"
+import AdminHeader from "../../components/admin/AdminHeader"
 
 const Dashboard = ()=>{
     return(

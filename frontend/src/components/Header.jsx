@@ -6,6 +6,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setCartItemsCount } from "../redux/createSlice";
 import axios from "axios";
 
+const logoutHandler=()=>{
+  localStorage.removeItem('authToken')
+  window.location.href = '/'
+}
+
 const Header = () => {
   const token = localStorage.getItem('authToken')
   const dispatch = useDispatch()

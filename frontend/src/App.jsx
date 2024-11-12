@@ -8,6 +8,7 @@ import CheckOut from "./pages/CheckOut";
 import Dashboard from "./pages/admin/Dashboard";
 import AdminProduct from "./pages/admin/AdminProduct";
 import AdminOrdersList from "./pages/admin/AdminOrdersList";
+import UsersListPage from "./pages/admin/UsersListPage";
 
 
 
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/admin/dashboard" element={<Dashboard/>}/>
           <Route path="/admin/product" element={<AdminProduct/>}/>
           <Route path="/admin/order" element={<AdminOrdersList/>}/>
+          <Route path="/admin/users" element={<UsersListPage/>} />
         </Routes>
     </Router>
   );

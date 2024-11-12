@@ -9,9 +9,9 @@ const AdminHeader = () => {
   return (
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <Link class="navbar-brand" to='/admin/dashboard'>
           Home
-        </a>
+        </Link>
         <button
           class="navbar-toggler"
           type="button"
@@ -26,7 +26,7 @@ const AdminHeader = () => {
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <Link class="nav-link" aria-current="page" to='/admin/dashboard'>
+              <Link class="nav-link" aria-current="page" to='/admin/users'>
                 Users 
               </Link>
             </li>

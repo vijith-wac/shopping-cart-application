@@ -25,3 +25,16 @@ export const createOrder = async (payload) => {
     })
   }
 };
+
+export const getAllOrders = async(token)=>{
+  try{
+    const response = await axios.get(`${API_URL}/order`,{
+      headers:{
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    return response.data.orders
+  }catch(error){
+    console.log(error)
+  }
+}
